@@ -5,6 +5,9 @@ The most important part in here is how to configure LUT(Lookup Table Address) an
 
 https://github.com/user-attachments/assets/f41cf67e-b09f-457a-a7ec-b0fd8092c6a8
 
+https://github.com/user-attachments/assets/7a35b5d1-7f53-488f-9f4f-340e2d6980b3
+
+
 
 ## Contributing
 We welcome contributions! Please submit a pull request or open an issue to discuss any changes.
