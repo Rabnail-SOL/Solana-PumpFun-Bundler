@@ -1,17 +1,16 @@
 import dotenv from "dotenv";
 import fs, { openAsBlob } from "fs";
-import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
-import { DEFAULT_DECIMALS, PumpFunSDK } from "../../src";
+import path from "path";
+import { Connection, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { PumpFunSDK } from "../../src";
 import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 import { AnchorProvider } from "@coral-xyz/anchor";
 import {
   getOrCreateKeypair,
-  getSPLBalance,
   printSOLBalance,
   printSPLBalance,
 } from "../util";
 import metadata from "../../src/metadata";
-import { getUploadedMetadataURI } from "../../src/uploadToIpfs";
 import { bs58 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 
 const KEYS_FOLDER = __dirname + "/.keys";
@@ -30,15 +29,27 @@ async function createKeypair() {
   const secretKeyBase58 = bs58.encode(secretKey);
 
   const data = {
-    "publicKey": publicKeyBase58,
-    "secretKey": secretKeyBase58
-  }
+    publicKey: publicKeyBase58,
+    secretKey: secretKeyBase58,
+  };
   const metadataString = JSON.stringify(data);
-  const bufferContent = Buffer.from(metadataString, 'utf-8');
-  fs.writeFileSync("./example/basic/.keys/mint.json", bufferContent);
+  const bufferContent = Buffer.from(metadataString, "utf-8");
+
+  // Determine the target directory
+  const keysDir = path.join(__dirname, ".keys");
+
+  // Check if the directory exists, and create it if it does not
+  if (!fs.existsSync(keysDir)) {
+    fs.mkdirSync(keysDir, { recursive: true });
+  }
+
+  // Write the file to the target directory
+  const filePath = path.join(keysDir, "mint.json");
+  fs.writeFileSync(filePath, bufferContent);
 
   return keypair; // Return the keypair object if needed
 }
+
 
 const main = async () => {
   dotenv.config();
